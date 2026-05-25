@@ -12,6 +12,35 @@
   --font-mono: var(--font-geist-mono);
 }
 
+
+@layer base {
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html,
+  body {
+    font-family: helvetica, Arial, sans-serif;
+  }
+
+  body {
+    background-color: #000000;
+  }
+
+
+  a {
+    color: #7a0cc9; /* Roxo */
+    transition: color 0.5s ease; /* Transição suave */
+  }
+
+  a:hover {
+    color: #4B0082; /* Roxo mais escuro no hover */
+  }
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
@@ -19,8 +48,3 @@
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-}
