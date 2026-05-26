@@ -8,7 +8,7 @@ import Home from "./pages/home";
 export default function App() {
     return (
         <div className="App" style={{ fontFamily: "helvetica" }}>
-            {/* Navbar: Barra de navegação com busca */}S
+            {/* Navbar: Barra de navegação com busca */}
             <Navbar />
             
             <main className="bg-black min-h-screen">

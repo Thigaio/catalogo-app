@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import { useState, useEffect } from "react"
+import MovieCard from "../components/movieCard"
 
 // Endpoints da API TMDB carregados das variáveis de ambiente
 const moviesURL = process.env.NEXT_PUBLIC_TMDB_API_URL
@@ -25,23 +26,13 @@ const Home = () => {
     }, []); // Dependency array vazio = executa só na montagem
 
     return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
-            {topMovies && topMovies.map((movie) => (
-                <div key={movie.id} className="bg-gray-800 rounded-lg overflow-hidden hover:scale-105 transition">
-                    {movie.poster_path && (
-                        <img 
-                            src={`$${process.env.NEXT_PUBLIC_IMAGE_URL}${movie.poster_path}`} 
-                            alt={movie.title}
-                            className="w-full h-64 object-cover"
-                        />
-                    )}
-                    <div className="p-3">
-                        <h3 className="text-purple-500 font-bold text-sm line-clamp-2">{movie.title}</h3>
-                        <p className="text-gray-400 text-xs">{movie.release_date}</p>
-                        <p className="text-gray-300 text-xs mt-1">⭐ {movie.vote_average}</p>
-                    </div>
-                </div>
-            ))}
+        <div className="w-full">
+            <h2 className="text-2xl font-bold mb-4 text-purple-500 p-4">Top Filmes</h2>
+            <div className="movies-container grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 px-4 pb-4 w-full">
+                {topMovies.length === 0 && <p className="text-purple-500 font-bold text-sm line-clamp-2">Carregando filmes...</p>} 
+                {topMovies.length > 0 && 
+                    topMovies.map((movie) => <MovieCard key={movie.id} movie={movie} />)} {/*Renderização condicional: mostra mensagem de carregamento ou lista de filmes */}
+             </div>
         </div>
     );
 }
