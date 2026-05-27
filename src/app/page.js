@@ -1,11 +1,10 @@
 "use client";
 
-import "./globals.css" // Importa estilos globais com Tailwind
 import Navbar from "./components/navbar";
 import Home from "./pages/home";
 
 // Componente raiz que renderiza layout principal da aplicação
-export default function App() {
+function App() {
     return (
         <div className="App" style={{ fontFamily: "helvetica" }}>
             {/* Navbar: Barra de navegação com busca */}
@@ -18,3 +17,5 @@ export default function App() {
         </div>
     );
 }
+
+export default App;

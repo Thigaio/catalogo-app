@@ -1,40 +1,70 @@
 ﻿"use client";
 
-import { useState, useEffect } from "react"
-import MovieCard from "../components/movieCard"
+import { useState, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
+import MovieCard from "../components/movieCard";
 
-// Endpoints da API TMDB carregados das variáveis de ambiente
-const moviesURL = process.env.NEXT_PUBLIC_TMDB_API_URL
-const apiKey = process.env.NEXT_PUBLIC_TMDB_API_KEY
+const moviesURL = process.env.NEXT_PUBLIC_TMDB_API_URL;
+const apiKey = process.env.NEXT_PUBLIC_TMDB_API_KEY;
+const searchUrl = process.env.NEXT_PUBLIC_SEARCH_API;
 
-const Home = () => {
-    const [topMovies, setTopMovies] = useState([]);
+function HomeContent() {
+    const [movies, setMovies] = useState([]);
+    const [title, setTitle] = useState("Top Filmes");
+    const [loading, setLoading] = useState(true);
+    
+    const searchParams = useSearchParams();
+    const searchTerm = searchParams.get("q");
 
-    const getTopRatedMovies = async (url) => {
+    const getMovies = async (url, titleText) => {
+        setLoading(true);
         try {
             const res = await fetch(url);
             const data = await res.json();
-            setTopMovies(data.results); // Atualiza estado com array de filmes
+            setMovies(data.results || []);
+            setTitle(titleText);
         } catch (error) {
-            console.error('Erro ao buscar filmes:', error);
-        }
-    };
+            console.error("Erro ao buscar filmes:", error);
+        } finally {
+            setLoading(false);
+        } {/* Garante que o estado de loading seja atualizado mesmo em caso de erro */}
+    }; 
 
     useEffect(() => {
-        const topRatedUrl = `${moviesURL}/top_rated?api_key=${apiKey}`;
-        getTopRatedMovies(topRatedUrl);
-    }, []); // Dependency array vazio = executa só na montagem
+        if (searchTerm && searchUrl) {
+            const url = `${searchUrl}?api_key=${apiKey}&query=${encodeURIComponent(searchTerm)}`;
+            getMovies(url, `Resultados para: "${searchTerm}"`);
+        } else {
+            const topRatedUrl = `${moviesURL}/top_rated?api_key=${apiKey}`;
+            getMovies(topRatedUrl, "Top Filmes");
+        } {/* O useEffect é acionado sempre que o searchTerm muda, buscando filmes de acordo com a presença ou ausência do termo de busca */}
+    }, [searchTerm]); 
 
     return (
         <div className="w-full">
-            <h2 className="text-2xl font-bold mb-4 text-purple-500 p-4">Top Filmes</h2>
+            <h2 className="text-2xl font-bold mb-4 text-white p-4">{title}</h2>
             <div className="movies-container grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 px-4 pb-4 w-full">
-                {topMovies.length === 0 && <p className="text-purple-500 font-bold text-sm line-clamp-2">Carregando filmes...</p>} 
-                {topMovies.length > 0 && 
-                    topMovies.map((movie) => <MovieCard key={movie.id} movie={movie} />)} {/*Renderização condicional: mostra mensagem de carregamento ou lista de filmes */}
-             </div>
+                {loading && (
+                    <p className="text-white font-bold text-sm line-clamp-2">Carregando...</p>
+                )} 
+                {!loading && movies.length === 0 && (
+                    <p className="text-white font-bold text-sm line-clamp-2">Nenhum filme encontrado.</p>
+                )}
+                {!loading && movies.length > 0 &&
+                    movies.map((movie) => (
+                        <MovieCard key={movie.id} movie={movie} />
+                    ))} {/* Exibe mensagens de carregamento, ausência de resultados ou a lista de filmes conforme o estado atual */}
+            </div>
         </div>
-    );
+    ); 
 }
 
-export default Home
+function Home() {
+    return (
+        <Suspense fallback={<div className="text-white p-4">Carregando...</div>}>
+            <HomeContent />
+        </Suspense>
+    );
+} {/* O componente Home é envolvido em Suspense para exibir um fallback enquanto o conteúdo é carregados */}
+
+export default Home;
