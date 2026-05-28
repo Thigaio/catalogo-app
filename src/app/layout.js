@@ -1,5 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Providers } from "./providers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -21,7 +22,9 @@ export default function RootLayout({ children }) {
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
-}
+} // Componente de layout raiz do aplicativo, que define a estrutura HTML básica e inclui os provedores de contexto necessários para o funcionamento do aplicativo. Ele também importa as fontes do Google e aplica classes CSS para estilização global. O conteúdo das páginas será renderizado dentro do componente Providers, garantindo que o gerenciamento de estado e outras funcionalidades estejam disponíveis em toda a aplicação.
