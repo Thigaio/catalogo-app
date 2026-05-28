@@ -3,7 +3,7 @@ import { useState } from 'react';
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
 
-const Navbar = () => {
+const Searchbar = () => {
     const [search, setSearch] = useState('');
     const router = useRouter();
  
@@ -44,4 +44,4 @@ const Navbar = () => {
     );
 };
 
-export default Navbar;
+export default Searchbar;
