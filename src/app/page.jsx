@@ -3,8 +3,7 @@
 import Searchbar from "./components/searchBar";
 import Home from "./pages/home";
 
-// Componente raiz que renderiza layout principal da aplicação
-function App() {
+export default function App() {
     return (
         <div className="App" style={{ fontFamily: "helvetica" }}>
             {/* Navbar: Barra de navegação com busca */}
@@ -17,5 +16,3 @@ function App() {
         </div>
     );
 }
-
-export default App;

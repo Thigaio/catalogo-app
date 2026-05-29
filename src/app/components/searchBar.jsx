@@ -7,10 +7,11 @@ import useDebounce from '../useDebounce';
 const Searchbar = () => {
     const router = useRouter(); 
     const [displayValue, setDisplayValue] = useState(''); 
+    
     // Função de busca com debounce
     const debouncedSearch = useDebounce((value) => { 
         if (value.trim()) {
-            router.push(`/?q=${value}`);
+            router.push(`/?q=${value}&page=1`);
         } else {
             router.push('/');
         }

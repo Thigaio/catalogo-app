@@ -1,23 +1,37 @@
 ﻿"use client";
 
-import { useSearchParams } from "next/navigation"; // Importa o hook useSearchParams para acessar os parâmetros de busca da URL, permitindo que a página reaja às mudanças na query de busca.
-import { useQuery } from "@tanstack/react-query"; // Importa o hook useQuery para gerenciamento de dados assíncronos, facilitando a busca e o cache dos dados dos filmes.
-import MovieCard from "../components/movieCard"; // Importa o componente MovieCard para exibir as informações de cada filme em um formato de cartão.
-import { getTopRatedMovies, searchMovies } from "@/lib/tmdb"; // Importa as funções getTopRatedMovies e searchMovies para buscar os filmes mais bem avaliados ou os resultados de uma busca específica usando a API do TMDB.
+import { useSearchParams, useRouter } from "next/navigation"; // Importa o hook useSearchParams e useRouter para ler e atualizar query params.
+import { useQuery } from "@tanstack/react-query"; // Importa o hook useQuery para gerenciamento de dados assíncronos.
+import MovieCard from "../components/movieCard"; // Importa o componente MovieCard para exibir os filmes em cartões.
+import Pagination from "../pagination"; // Importa o componente de paginação.
+import { getTopRatedMovies, searchMovies } from "@/lib/tmdb"; // Importa as funções de busca do TMDB.
 
+// Componente que exibe a página inicial com os filmes mais bem avaliados ou resultados de busca, dependendo dos query params.
 function HomeContent() {
     const searchParams = useSearchParams();
+    const router = useRouter();
     const searchTerm = searchParams.get("q") || "";
+    const pageParam = parseInt(searchParams.get("page") || "1", 10);
+    const currentPage = Number.isNaN(pageParam) || pageParam < 1 ? 1 : pageParam;
 
     const { data, isLoading, error } = useQuery({
-        queryKey: searchTerm ? ["searchMovies", searchTerm] : ["topRatedMovies"],
-        queryFn: () => (searchTerm ? searchMovies(searchTerm) : getTopRatedMovies()),
+        queryKey: searchTerm ? ["searchMovies", searchTerm, currentPage] : ["topRatedMovies", currentPage],
+        queryFn: () => (searchTerm ? searchMovies(searchTerm, currentPage) : getTopRatedMovies(currentPage)),
         keepPreviousData: true,
         staleTime: 1000 * 60 * 2,
-    }); // Usa o hook useQuery para buscar os filmes com base na query de busca. Se houver um termo de busca, a consulta buscará os filmes correspondentes; caso contrário, buscará os filmes mais bem avaliados. A opção keepPreviousData mantém os dados anteriores enquanto a nova consulta está sendo feita, e staleTime define o tempo em que os dados são considerados frescos.
+    }); // Usa o hook useQuery para buscar os filmes com base na query de busca. 
 
     const movies = data?.results || [];
     const title = searchTerm ? `Resultados para: "${searchTerm}"` : "Top Filmes";
+    const totalPages = data?.total_pages || 1;
+
+    const handlePageChange = (newPage) => {
+        if (newPage < 1 || newPage === currentPage || newPage > totalPages) return;
+
+        const params = new URLSearchParams(searchParams.toString());
+        params.set("page", String(newPage));
+        router.push(`/?${params.toString()}`);
+    }; // Função para lidar com a mudança de página na paginação. 
 
     return (
         <div className="w-full">
@@ -35,12 +49,15 @@ function HomeContent() {
                 {!isLoading && !error && movies.length > 0 &&
                     movies.map((movie) => (
                         <MovieCard key={movie.id} movie={movie} />
-                    ))}
+                    ))} 
             </div>
+            {totalPages > 1 && (
+                <Pagination page={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+            )}
         </div>
-    ); // Exibe o título da seção (baseado na busca ou nos filmes mais bem avaliados) e uma grade de cartões de filmes. Durante o carregamento, exibe uma mensagem de carregamento; se ocorrer um erro, exibe a mensagem de erro; se não houver filmes encontrados, exibe uma mensagem indicando isso; caso contrário, mapeia os filmes para componentes MovieCard para exibição.
+    ); // Exibe o título da seção baseado na busca ou nos filmes mais bem avaliados e uma grade de cartões de filmes. 
 }
 
 export default function Home() {
     return <HomeContent />;
-} // Componente principal da página inicial, que renderiza o conteúdo da home usando o componente HomeContent. Isso permite que a lógica de busca e exibição dos filmes seja encapsulada em um componente separado, mantendo a estrutura do aplicativo organizada.
+} // Componente principal da página inicial, que renderiza o conteúdo da home usando o componente HomeContent. 

@@ -36,15 +36,14 @@ async function fetchTmdb(path, params = {}) {
   return response.json();
 } // Função auxiliar para construir a URL completa da API do TMDB com os parâmetros necessários e realizar a requisição.
 
-export function getTopRatedMovies() {
-  return fetchTmdb("/movie/top_rated", { page: 1 });
-} // Função para buscar os filmes mais bem avaliados usando o endpoint /movie/top_rated da API do TMDB, retornando a primeira página de resultados.
+export function getTopRatedMovies(page = 1) {
+  return fetchTmdb("/movie/top_rated", { page });
+} // Função para buscar os filmes mais bem avaliados usando o endpoint /movie/top_rated da API do TMDB.
 
-export function searchMovies(query) {
-  if (!query) return Promise.resolve({ results: [] });
-  return fetchTmdb("/search/movie", { query, page: 1 });
+export function searchMovies(query, page = 1) {
+  if (!query) return Promise.resolve({ results: [], page: 1, total_pages: 1, total_results: 0 });
+  return fetchTmdb("/search/movie", { query, page });
 } // Função para buscar filmes com base em um termo de busca, usando o endpoint /search/movie da API do TMDB.
-
 export function getMovieById(id) {
   return fetchTmdb(`/movie/${id}`);
 } // Função para buscar os detalhes de um filme específico usando o endpoint /movie/{movie_id} da API do TMDB, onde {movie_id} é o ID do filme a ser buscado.
