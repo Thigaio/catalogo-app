@@ -2,19 +2,20 @@
 import { useState } from 'react';
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
+import useDebounce from '../useDebounce';
 
 const Searchbar = () => {
-    const [search, setSearch] = useState('');
-    const router = useRouter();
- 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        
-        if (!search) return;
+    const router = useRouter(); 
+    const [displayValue, setDisplayValue] = useState(''); 
+    // Função de busca com debounce
+    const debouncedSearch = useDebounce((value) => { 
+        if (value.trim()) {
+            router.push(`/?q=${value}`);
+        } else {
+            router.push('/');
+        }
+    }, 500); 
 
-        router.push(`/?q=${search}`);
-        setSearch("");
-    }; 
 
     return (
         <nav className="bg-black border-b border-purple-500 p-4 w-full">
@@ -24,21 +25,18 @@ const Searchbar = () => {
                         Catálogo
                     </Link> {/* Link para a página inicial */}
                 </h2>
-                <form onSubmit={handleSubmit} className="flex flex-col md:flex-row gap-2 w-full md:w-auto">
+                <div className="w-full md:w-auto">
                     <input 
                         type="text" 
                         placeholder="Pesquisar..." 
-                        className="px-3 py-2 bg-gray-800 text-white rounded border border-gray-700 focus:outline-none focus:border-purple-500 flex-1 md:flex-none"
-                        onChange={(e) => setSearch(e.target.value)}
-                        value={search}
-                    /> {/* Campo de busca controlado */}
-                    <button 
-                        type="submit"
-                        className="px-4 py-2 bg-purple-500 text-black font-bold rounded hover:bg-purple-800 transition w-full md:w-auto"
-                    >
-                        Buscar
-                    </button> {/* Botão de submit para a busca */}
-                </form>
+                        className="px-3 py-2 bg-gray-800 text-white rounded border border-gray-700 focus:outline-none focus:border-purple-500 w-full md:w-auto"
+                        onChange={(e) => {
+                            setDisplayValue(e.target.value); // Atualiza o valor exibido no input
+                            debouncedSearch(e.target.value); // Chama a função de busca com debounce
+                        }} 
+                        value={displayValue} // Mantém o valor do input controlado pelo estado displayValue
+                    />
+                </div>
             </div>
         </nav>
     );
