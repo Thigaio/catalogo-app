@@ -1,6 +1,7 @@
 "use client";
 
-import Searchbar from "./components/searchBar";
+import { Suspense } from "react";
+import Searchbar from "./components/search";
 import Home from "./pages/home";
 
 export default function App() {
@@ -11,7 +12,9 @@ export default function App() {
             
             <main className="bg-black min-h-screen">
                 {/* Home: Componente que exibe grid de filmes da TMDB */}
-                <Home />
+                <Suspense fallback={<div className="text-white p-4">Carregando...</div>}>
+                    <Home />
+                </Suspense>
             </main>
         </div>
     );

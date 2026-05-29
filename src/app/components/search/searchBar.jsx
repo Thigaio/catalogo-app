@@ -2,20 +2,22 @@
 import { useState } from 'react';
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
-import useDebounce from '../useDebounce';
+import useDebounce from '../../../hooks/useDebounce';
+import { DEBOUNCE_DELAY } from '@/constants';
 
 const Searchbar = () => {
     const router = useRouter(); 
     const [displayValue, setDisplayValue] = useState(''); 
     
     // Função de busca com debounce
+    // Usa `replace` para não empilhar entradas no histórico enquanto o usuário digita
     const debouncedSearch = useDebounce((value) => { 
         if (value.trim()) {
-            router.push(`/?q=${value}&page=1`);
+            router.replace(`/?q=${value}&page=1`);
         } else {
-            router.push('/');
+            router.replace('/');
         }
-    }, 500); 
+    }, DEBOUNCE_DELAY); 
 
 
     return (
@@ -36,6 +38,7 @@ const Searchbar = () => {
                             debouncedSearch(e.target.value); // Chama a função de busca com debounce
                         }} 
                         value={displayValue} // Mantém o valor do input controlado pelo estado displayValue
+                        aria-label="Pesquisar filmes" // Acessibilidade: rótulo para leitores de tela
                     />
                 </div>
             </div>

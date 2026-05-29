@@ -12,13 +12,14 @@ const Pagination = ({ page, totalPages, onPageChange }) => {
 
     // Renderiza os botões de paginação, incluindo "Anterior", os números das páginas e "Próxima". 
     return (
-        <nav className="flex justify-center mt-6">
+        <nav className="flex justify-center mt-6" aria-label="Navegação de páginas">
             <ul className="pagination flex flex-wrap justify-center gap-2">
                 <li>
                     <button
                         className="px-3 py-1 bg-gray-800 text-white rounded border border-gray-700 hover:bg-gray-700 disabled:opacity-50"
                         onClick={() => onPageChange(current - 1)}
                         disabled={current === 1}
+                        aria-label="Página anterior"
                     >
                         Anterior
                     </button>
@@ -29,16 +30,19 @@ const Pagination = ({ page, totalPages, onPageChange }) => {
                             className={`px-3 py-1 rounded border border-gray-700 ${current === pageNumber ? 'bg-purple-500 text-black' : 'bg-gray-800 text-white hover:bg-gray-700'}`}
                             onClick={() => onPageChange(pageNumber)}
                             disabled={current === pageNumber}
+                            aria-current={current === pageNumber ? 'page' : undefined}
+                            aria-label={`Página ${pageNumber}`}
                         >
                             {pageNumber}
                         </button>
                     </li>
-                ))} 
+                ))}
                 <li>
                     <button
                         className="px-3 py-1 bg-gray-800 text-white rounded border border-gray-700 hover:bg-gray-700 disabled:opacity-50"
                         onClick={() => onPageChange(current + 1)}
                         disabled={current === totalPages}
+                        aria-label="Próxima página"
                     >
                         Próxima
                     </button>

@@ -2,7 +2,8 @@
 
 import { useQuery } from "@tanstack/react-query"; // Importa o hook useQuery para gerenciamento de dados assíncronos
 import { useParams } from "next/navigation"; // Importa o hook useParams para acessar os parâmetros da rota (neste caso, o ID do filme)
-import Searchbar from "@/app/components/searchBar"; // Importa o componente Searchbar para permitir que os usuários façam buscas de filmes
+import Searchbar from "@/app/components/search"; // Importa o componente Searchbar para permitir que os usuários façam buscas de filmes
+import QueryStatus from "@/app/components/ui/queryStatus"; // Importa componente de status de query para loading/erro
 import { getMovieById } from "@/lib/tmdb"; // Importa a função getMovieById para buscar os detalhes de um filme específico usando a API do TMDB
 
 const imageUrl = process.env.NEXT_PUBLIC_IMAGE_URL; // Obtém a URL base para as imagens dos filmes a partir das variáveis de ambiente
@@ -40,7 +41,7 @@ export default function MovieDetailsPage() {
     return (
       <div className="bg-black min-h-screen text-white">
         <Searchbar />
-        <div className="text-white font-bold text-md line-clamp-2 mt-2">Erro ao carregar os detalhes do filme: {error.message}</div>
+        <QueryStatus error={error} loadingText="Carregando detalhes do filme..." errorText="Erro ao carregar os detalhes do filme:" />
       </div>
     );
   } // Se ocorrer um erro ao buscar os dados, exibe uma mensagem de erro junto com a barra de pesquisa.
