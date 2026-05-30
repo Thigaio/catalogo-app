@@ -14,8 +14,6 @@ NEXT_PUBLIC_TMDB_API_KEY=your_tmdb_api_key_here
 NEXT_PUBLIC_IMAGE_URL=https://image.tmdb.org/t/p/w500
 ```
 
-O arquivo `.env.local` deve permanecer local e não deve ser enviado ao Git.
-
 ## Como rodar
 
 Instale as dependências e então execute o servidor de desenvolvimento:
