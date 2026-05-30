@@ -6,7 +6,7 @@ import Searchbar from "@/app/components/search"; // Importa o componente Searchb
 import QueryStatus from "@/app/components/ui/queryStatus"; // Importa componente de status de query para loading/erro
 import { getMovieById } from "@/lib/tmdb"; // Importa a função getMovieById para buscar os detalhes de um filme específico usando a API do TMDB
 
-const imageUrl = process.env.NEXT_PUBLIC_IMAGE_URL; // Obtém a URL base para as imagens dos filmes a partir das variáveis de ambiente
+const imageUrl = process.env.NEXT_PUBLIC_IMAGE_URL || "https://image.tmdb.org/t/p/w500"; // Obtém a URL base para as imagens dos filmes a partir das variáveis de ambiente, com fallback
 
 function joinUrl(base, path) {
   if (!base) return "";

@@ -1,4 +1,4 @@
-const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
+const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY || "244472d31ff895a903c2344dc2ddcbbd"; // Obtém a chave da API do TMDB a partir de uma variável de ambiente.
 const BASE_URL = process.env.NEXT_PUBLIC_TMDB_API_URL || "https://api.themoviedb.org/3";
 
 if (!API_KEY) {

@@ -1,41 +1,43 @@
 # catalogo-app
-Catalogo de filmes utilizando React, Next.js e TanStack Query com a TMDB api.
+Catálogo de filmes utilizando React, Next.js e TanStack Query com a API do TMDB.
 
 ---
 
-This project was bootstrapped with Create Next App and includes the default Next.js README below for convenience.
+## Variáveis de ambiente
 
-## Getting Started
+Para rodar este projeto, você precisa de uma chave da API do TMDB.
 
-First, run the development server:
+1. Copie o arquivo de exemplo:
+
+```bash
+cp .env.example .env.local
+# Windows PowerShell
+Copy-Item .env.example .env.local
+```
+
+2. Preencha o arquivo `.env.local` com sua chave:
+
+```env
+NEXT_PUBLIC_TMDB_API_KEY=your_tmdb_api_key_here
+NEXT_PUBLIC_IMAGE_URL=https://image.tmdb.org/t/p/w500
+```
+
+O arquivo `.env.local` deve permanecer local e não deve ser enviado ao Git.
+
+## Como rodar
+
+Execute o servidor de desenvolvimento:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abra [http://localhost:3000](http://localhost:3000) no navegador.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## Sobre o projeto
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load fonts.
+Este projeto usa [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) para otimizar e carregar fontes automaticamente.
 
-## Learn More
+## Mais informações
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme).
-
-Check out the Next.js deployment documentation for more details.
+- [Documentação do Next.js](https://nextjs.org/docs)
